@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import Result from './components/Result';
+import Keypad from './components/Keypad';
 
 class App extends Component {
   constructor() {
@@ -16,6 +17,7 @@ class App extends Component {
       <div>
         <div className="calculator">
           <Result result={this.state.result} />
+          <Keypad onClick={this.onClick} />
         </div>
       </div>
     )
