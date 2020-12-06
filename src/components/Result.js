@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 
 class Result extends Component {
-
     render() {
-        let {result} = this.props;
         return (
             <div className="result">
-                <h3>{result}</h3>
+                <em>{this.props.calc}</em>
+                <span id="display">{this.props.result}</span>
             </div>
         )
     }

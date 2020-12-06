@@ -8,33 +8,62 @@ class App extends Component {
     super();
 
     this.state = {
-      result: ""
+      calc: "",
+      result: "0"
     }
+    this.handleButtons = this.handleButtons.bind(this);
   }
 
-  onClick = button => {
-    if(button === "=") {
-      this.calculate()
-    } else if (button === "C") {
+  handleButtons = (e) => {
+    let calc = this.state.calc;
+    let calcTarget = e.target.value;
+    if(e.target.value === "=") {
+      this.calcResult();
+    } else if(calcTarget === "ac") {
       this.reset()
+    } else if((['+', '*', '/', '%'].indexOf(calc[calc.length - 1]) !== -1) && (['+', '*', '/', '%'].indexOf(calcTarget) !== -1)) {
+      let newCalc = calc.slice(0, -1);
+      this.setState({
+        calc: newCalc + calcTarget,
+        result: newCalc + calcTarget,
+      })
+
+    } else if(['.'].indexOf(calc[calc.length - 1]) !== -1 && ['.'].indexOf(calcTarget) !== -1) {
+      let newCalc = calc.slice(0, -1);
+      this.setState({
+        calc: newCalc + calcTarget,
+        result: newCalc + calcTarget,
+      })
+    } else if((['-'].indexOf(calc[calc.length - 1]) !== -1) && (['+', '*', '/', '%'].indexOf(calcTarget) !== -1)) {
+      let newCalc = this.state.calc.slice(0, -2);
+      this.setState({
+        calc: newCalc +calcTarget,
+        result: newCalc + calcTarget,
+      })
+    } else if((['0'].indexOf(calc[calc.length - 1]) !== -1) && calc.length < 2 && (['0'].indexOf(calcTarget) !== -1)) {
+      let newCalc = this.state.calc.slice(0, -1);
+      this.setState({
+        calc: newCalc + calcTarget,
+        result: newCalc + calcTarget,
+      })
     } else {
       this.setState({
-        result: this.state.result + button
+        calc: calc + calcTarget,
+        result: calc + calcTarget
       })
     }
+
   }
 
-  calculate = () => {
+  calcResult = () => {
     let checkResult = ''
-    if(this.state.result.includes('--')) {
-      checkResult = this.state.result.replace('--', '+');
-    } else {
-      checkResult = this.state.result
-    }
+
     try {
+      checkResult = eval(this.state.calc)
       this.setState({
         //eslint-disable-next-line
-        result: (eval(checkResult))
+        result: checkResult,
+        calc: checkResult
       })
     }
     catch (e) {
@@ -42,11 +71,12 @@ class App extends Component {
         result: 'error'
       })
     }
-  };
+  }
 
   reset = () => {
     this.setState({
-      result: ""
+      calc: "",
+      result: "0"
     })
   };
 
@@ -54,8 +84,8 @@ class App extends Component {
     return (
       <div>
         <div className="calculator">
-          <Result result={this.state.result} />
-          <Keypad onClick={this.onClick} />
+          <Result result={this.state.result} calc={this.state.calc} />
+          <Keypad handleButton={this.handleButtons} />
         </div>
       </div>
     )
