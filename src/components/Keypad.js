@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 
 
 class Keypad extends Component {
-  constructor(props) {
-    super(props);
-  }
   
   render() {
     const buttons = [
@@ -75,6 +72,10 @@ class Keypad extends Component {
       {
         btn: 'ac',
         id: 'clear',
+      },
+      {
+        btn: 'del',
+        id: 'delete',
       }
     ];
     const calculatorBtns = buttons.map(({ btn, id }) => (

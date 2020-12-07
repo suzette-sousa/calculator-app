@@ -15,49 +15,52 @@ class App extends Component {
   }
 
   handleButtons = (e) => {
-    let calc = this.state.calc;
     let calcTarget = e.target.value;
+
     if(e.target.value === "=") {
       this.calcResult();
     } else if(calcTarget === "ac") {
       this.reset()
-    } else if((['+', '*', '/', '%'].indexOf(calc[calc.length - 1]) !== -1) && (['+', '*', '/', '%'].indexOf(calcTarget) !== -1)) {
-      let newCalc = calc.slice(0, -1);
-      this.setState({
-        calc: newCalc + calcTarget,
-        result: newCalc + calcTarget,
-      })
-
-    } else if(['.'].indexOf(calc[calc.length - 1]) !== -1 && ['.'].indexOf(calcTarget) !== -1) {
-      let newCalc = calc.slice(0, -1);
-      this.setState({
-        calc: newCalc + calcTarget,
-        result: newCalc + calcTarget,
-      })
-    } else if((['-'].indexOf(calc[calc.length - 1]) !== -1) && (['+', '*', '/', '%'].indexOf(calcTarget) !== -1)) {
-      let newCalc = this.state.calc.slice(0, -2);
-      this.setState({
-        calc: newCalc +calcTarget,
-        result: newCalc + calcTarget,
-      })
-    } else if((['0'].indexOf(calc[calc.length - 1]) !== -1) && calc.length < 2 && (['0'].indexOf(calcTarget) !== -1)) {
-      let newCalc = this.state.calc.slice(0, -1);
-      this.setState({
-        calc: newCalc + calcTarget,
-        result: newCalc + calcTarget,
-      })
+    }  else if(calcTarget === "del") {
+      this.delAction()
     } else {
-      this.setState({
-        calc: calc + calcTarget,
-        result: calc + calcTarget
-      })
+      this.checkOpConditions(calcTarget);
+    }
+  }
+
+  checkOpConditions = (calcTarget) => {
+    let calc = this.state.calc;
+    let calcStr = calc.toString();
+    let newCalc = calc + calcTarget;
+
+    if(newCalc.substr(-2).match(/[%,/,+,*][%,/,+,*]/g) || newCalc.match(/^[0]{1,}/g)) {
+      calc = calc.slice(0, -1);
+    }
+    if(newCalc.substr(-2).match(/[-][%,/,+,*]/g)) {
+      calc = calc.slice(0, -2);
+    }
+    if(calcStr.match(/[.]{2,}/g) || calcStr.match(/[.]{1,}[-,/,+,*,%]/g) || calcStr.match(/[0-9]+[.]{1,}[0-9]+[.]{1,}/g)) {
+      calc = calc.slice(0, -1);
     }
 
+    this.setState({
+      calc: calc + calcTarget,
+      result: calc + calcTarget
+    })
+  }
+
+  delAction = () => {
+    let calc = this.state.calc;
+    let newCalc = calc.toString();
+    newCalc = calc.slice(0, -1);
+    this.setState({
+      calc: newCalc,
+      result: newCalc
+    })
   }
 
   calcResult = () => {
     let checkResult = ''
-
     try {
       checkResult = eval(this.state.calc)
       this.setState({
@@ -68,7 +71,7 @@ class App extends Component {
     }
     catch (e) {
       this.setState({
-        result: 'error'
+        result: 'Erreur'
       })
     }
   }
