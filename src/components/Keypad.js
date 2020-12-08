@@ -6,6 +6,16 @@ class Keypad extends Component {
   render() {
     const buttons = [
       {
+        btn: '=',
+        id: 'equals',
+        type: 'total'
+      },
+      {
+        btn: '.',
+        id: 'decimal',
+        type: 'number'
+      },
+      {
         btn: '0',
         id: 'zero',
         type: 'number'
@@ -56,11 +66,6 @@ class Keypad extends Component {
         type: 'number'
       },
       {
-        btn: '.',
-        id: 'decimal',
-        type: 'number'
-      },
-      {
         btn: '+',
         id: 'add',
         type: 'op'
@@ -81,12 +86,7 @@ class Keypad extends Component {
         type: 'op'
       },
       {
-        btn: '=',
-        id: 'equals',
-        type: 'op'
-      },
-      {
-        btn: 'ac',
+        btn: 'AC',
         id: 'clear',
         type: 'other'
       },
@@ -106,10 +106,10 @@ class Keypad extends Component {
     
     let calculatorBtnsCatg = groupArrayOfObjects(buttons,"type");
 
-    const calculatorBtns = Object.keys(calculatorBtnsCatg).map((item) => (
-      <div className={item}>
+    const calculatorBtns = Object.keys(calculatorBtnsCatg).map((item, i) => (
+      <div key={i} className={item}>
         {calculatorBtnsCatg[item].map(({ btn, id }) => (
-          <button key={id} value={btn} onClick={this.props.handleButton}>{btn}</button>
+          <button key={id} className={`btn btn-${item}`} value={btn} onClick={this.props.handleButton}>{btn}</button>
         ))}
       </div>
     ));

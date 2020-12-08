@@ -19,7 +19,7 @@ class App extends Component {
 
     if(e.target.value === "=") {
       this.calcResult();
-    } else if(calcTarget === "ac") {
+    } else if(calcTarget === "AC") {
       this.reset()
     }  else if(calcTarget === "←") {
       this.delAction()
@@ -91,8 +91,8 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <div className="calculator">
+      <div className="calculator">
+        <div className="calculator-ctn">
           <Result result={this.state.result} calc={this.state.calc} />
           <Keypad handleButton={this.handleButtons} />
         </div>

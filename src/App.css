@@ -7,35 +7,82 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 .calculator {
-  max-width: 500px;
-  margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   height: 100vh;
+  background-color: #226686;
+}
+.calculator-ctn {
+  max-width: 500px;
+  border-style: solid;
+  border-width: 5px 5px 20px 25px;
+  border-color: #222 #000;
+  border-radius: 15px 5px 15px 15px;
 }
 .result {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  height: 4rem;
-  padding-right: 1rem;
-  background-color: #222;
-  color: #fff;
+  padding: 0 0.5rem;
+  height: 5rem;
+  background-color: #fff;
+  color: #000;
   font-size: 2.2rem;
 }
 .calc {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100%;
   font-size: 1.3rem;
   color: #ccc;
 }
 .buttons {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  grid-template-areas: 
+  "other other other op"
+  "number number total op";
 }
-button {
-  height: 3rem;
-  background-color: #fff;
-  border: 1px solid #ccc;
+.other {
+  grid-area: other;
+  display: flex;
+}
+.number {
+  grid-area: number;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  flex-direction: row-reverse;
+}
+.op {
+  grid-area: op;
+  display: flex;
+  flex-direction: column;
+  flex-flow: column-reverse;
+}
+.total {
+  grid-area: total;
+  display: flex;
+}
+.btn {
+  padding: 1rem 0.5rem;
+  background-color: #eff3f5;
+  border-color: rgba(0, 0, 0, 0.1);
+  border-width: 1px 0 0;
   font-size: 2rem;
+  flex: 1 0 25%;
+}
+.btn-op {
+  background-color: #599dbd;
+  color: #fff;
+}
+.btn-other {
+  background-color: #d0dbe0;
+}
+.btn-total {
+  background-color: #383e46;
+  color: #fff;
 }
