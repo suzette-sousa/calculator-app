@@ -8,7 +8,7 @@ class App extends Component {
     super();
 
     this.state = {
-      calc: "",
+      calc: "0",
       result: "0"
     }
     this.handleButtons = this.handleButtons.bind(this);
@@ -21,7 +21,7 @@ class App extends Component {
       this.calcResult();
     } else if(calcTarget === "ac") {
       this.reset()
-    }  else if(calcTarget === "del") {
+    }  else if(calcTarget === "←") {
       this.delAction()
     } else {
       this.checkOpConditions(calcTarget);
@@ -33,20 +33,25 @@ class App extends Component {
     let calcStr = calc.toString();
     let newCalc = calc + calcTarget;
 
-    if(newCalc.substr(-2).match(/[%,/,+,*][%,/,+,*]/g) || newCalc.match(/^[0]{1,}/g)) {
-      calc = calc.slice(0, -1);
+    if(newCalc.substr(-2).match(/[-][-]/g)) {
+      calc = newCalc.replace("--", "+");
+      this.setState({
+        calc: calc
+      })
+    } else {
+      if(newCalc.substr(-2).match(/[%,/,+,*]{2,}/g) || newCalc.match(/^[0]{1,}/g)) {
+        calc = calc.slice(0, -1);
+      }
+      if(newCalc.substr(-2).match(/[-][%,/,+,*]/g)) {
+        calc = calc.slice(0, -2);
+      }
+      if(calcStr.match(/[.]{2,}/g) || calcStr.match(/[.]{1,}[-,/,+,*,%]/g) || calcStr.match(/[0-9]+[.]{1,}[0-9]+[.]{1,}/g)) {
+        calc = calc.slice(0, -1);
+      }
+      this.setState({
+        calc: calc + calcTarget
+      })
     }
-    if(newCalc.substr(-2).match(/[-][%,/,+,*]/g)) {
-      calc = calc.slice(0, -2);
-    }
-    if(calcStr.match(/[.]{2,}/g) || calcStr.match(/[.]{1,}[-,/,+,*,%]/g) || calcStr.match(/[0-9]+[.]{1,}[0-9]+[.]{1,}/g)) {
-      calc = calc.slice(0, -1);
-    }
-
-    this.setState({
-      calc: calc + calcTarget,
-      result: calc + calcTarget
-    })
   }
 
   delAction = () => {
@@ -54,31 +59,32 @@ class App extends Component {
     let newCalc = calc.toString();
     newCalc = calc.slice(0, -1);
     this.setState({
-      calc: newCalc,
-      result: newCalc
+      calc: newCalc
     })
   }
 
+  
   calcResult = () => {
-    let checkResult = ''
-    try {
-      checkResult = eval(this.state.calc)
+    if(!this.state.calc.match(/[-,%,/,+,*,.]$/g)) {
+      let checkResult = ''
+      function parse(str) {
+        return Function(`'use strict'; return (${str})`)();
+      }
+      checkResult = parse(this.state.calc);
+      checkResult = Math.round(checkResult * 100) / 100;
       this.setState({
-        //eslint-disable-next-line
-        result: checkResult,
-        calc: checkResult
+        result: checkResult
       })
-    }
-    catch (e) {
+    } else {
       this.setState({
-        result: 'Erreur'
+        result: "Erreur"
       })
     }
   }
 
   reset = () => {
     this.setState({
-      calc: "",
+      calc: "0",
       result: "0"
     })
   };

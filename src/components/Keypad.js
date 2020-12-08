@@ -74,7 +74,7 @@ class Keypad extends Component {
         id: 'clear',
       },
       {
-        btn: 'del',
+        btn: '←',
         id: 'delete',
       }
     ];
