@@ -45,7 +45,7 @@ body {
   grid-template-columns: repeat(4, 1fr);
   grid-template-areas: 
   "other other other other"
-  "number number total op";
+  "op number number total";
 }
 .other {
   grid-area: other;
